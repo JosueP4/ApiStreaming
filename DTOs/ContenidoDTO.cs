@@ -13,8 +13,8 @@
         public int Duracion { get; set; }
 
         public DateTime? FechaPublicacion { get; set; }
+        public int? PlanId { get; set; }
 
-        public string Acceso { get; set; } = null!;
 
        
 

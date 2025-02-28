@@ -17,7 +17,9 @@ public partial class Contenido
 
     public DateTime? FechaPublicacion { get; set; }
 
-    public string Acceso { get; set; } = null!;
+    public int? PlanId { get; set; }
+
+    public virtual Plane? Plan { get; set; }
 
     public virtual Suscripcione? Suscripcion { get; set; }
 }

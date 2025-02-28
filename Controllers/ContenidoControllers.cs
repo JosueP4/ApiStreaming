@@ -3,6 +3,7 @@ using APIStreaming.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
+using System.Security.Claims;
 
 namespace APIStreaming.Controllers
 {
@@ -24,7 +25,7 @@ namespace APIStreaming.Controllers
         [HttpGet("ListaContenido")]
         public async Task<ActionResult<List<ContenidoDTO>>> ListaContenido()
         {
-            List<ContenidoDTO> contenido = await _services.ListaVideos();
+            List<ContenidoDTO> contenido = await _services.ListaVideos(User);
             return Ok(contenido);
         }
 

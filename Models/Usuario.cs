@@ -9,7 +9,7 @@ public partial class Usuario
 
     public string? Nombre { get; set; }
 
-    public string Contra { get; set; } = null!;
+    public string? Contra { get; set; }
 
     public string Email { get; set; } = null!;
 
@@ -21,7 +21,11 @@ public partial class Usuario
 
     public DateTime? RefreshTokenExpiration { get; set; }
 
+    public int? PlanId { get; set; }
+
     public virtual ICollection<Pago> Pagos { get; set; } = new List<Pago>();
+
+    public virtual Plane? Plan { get; set; }
 
     public virtual ICollection<Suscripcione> Suscripciones { get; set; } = new List<Suscripcione>();
 }

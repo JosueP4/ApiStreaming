@@ -39,12 +39,15 @@ public partial class ApistreamingDbContext : DbContext
 
             entity.ToTable("CONTENIDO");
 
-            entity.Property(e => e.Acceso).HasMaxLength(50);
             entity.Property(e => e.Descripcion).HasMaxLength(255);
             entity.Property(e => e.FechaPublicacion)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Titulo).HasMaxLength(50);
+
+            entity.HasOne(d => d.Plan).WithMany(p => p.Contenidos)
+                .HasForeignKey(d => d.PlanId)
+                .HasConstraintName("FK__CONTENIDO__PlanI__14270015");
 
             entity.HasOne(d => d.Suscripcion).WithMany(p => p.Contenidos)
                 .HasForeignKey(d => d.SuscripcionId)
@@ -114,7 +117,7 @@ public partial class ApistreamingDbContext : DbContext
 
             entity.ToTable("USUARIOS");
 
-            entity.Property(e => e.Contra).HasMaxLength(50);
+            entity.Property(e => e.Contra).HasMaxLength(255);
             entity.Property(e => e.Email).HasMaxLength(100);
             entity.Property(e => e.Nombre).HasMaxLength(50);
             entity.Property(e => e.RefreshToken).HasMaxLength(500);
@@ -122,6 +125,10 @@ public partial class ApistreamingDbContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("refreshTokenExpiration");
             entity.Property(e => e.Rol).HasMaxLength(50);
+
+            entity.HasOne(d => d.Plan).WithMany(p => p.Usuarios)
+                .HasForeignKey(d => d.PlanId)
+                .HasConstraintName("FK__USUARIOS__PlanId__2739D489");
         });
 
         modelBuilder.Entity<VistaContenidoConDuracion>(entity =>

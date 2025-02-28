@@ -17,5 +17,9 @@ public partial class Plane
 
     public string Descargas { get; set; } = null!;
 
+    public virtual ICollection<Contenido> Contenidos { get; set; } = new List<Contenido>();
+
     public virtual ICollection<Suscripcione> Suscripciones { get; set; } = new List<Suscripcione>();
+
+    public virtual ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
 }

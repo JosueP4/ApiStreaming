@@ -20,7 +20,7 @@ namespace APIStreaming.Controllers
         }
 
 
-        [Authorize(Roles = "admin")]
+        [Authorize(Roles = "admin, Cliente")]
         [HttpPost]
         [Route("CrearSuscripcion")]
         public async Task<ActionResult> CrearSuscripcion([FromBody] SuscripcionesDTO suscripcionesDTO)

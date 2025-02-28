@@ -2,6 +2,7 @@
 using APIStreaming.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace APIStreaming.Services
 {
@@ -15,14 +16,53 @@ namespace APIStreaming.Services
             _context = context;
         }
 
-        public async Task<List<ContenidoDTO>> ListaVideos()
+        public async Task<List<ContenidoDTO>> ListaVideos(ClaimsPrincipal user)
         {
 
-            List<ContenidoDTO> contenidoList = new List<ContenidoDTO>();
-            var contenido = await _context.Contenidos.ToListAsync();
+            var usuario = int.Parse(user.FindFirst("UsuarioId").Value);
 
-            foreach (var item in contenidoList)
+            var usuarioClaim = user.FindFirst("UsuarioId");
+
+            if (usuarioClaim == null)
             {
+                
+                throw new Exception("no se encontro el usuario");
+            }
+
+            var planClaim = user.FindFirst("PlanId");
+
+            if (planClaim == null)
+            {
+
+                throw new Exception("no se encontro el plan");
+            }
+
+            if (!int.TryParse(planClaim.Value, out int userPlanId))
+            {
+                throw new Exception("El valor del claim 'PlanId' no es un entero válido.");
+            }
+
+            IQueryable<Contenido> query = _context.Contenidos;
+
+            if(userPlanId == 5)
+            {
+                query = query.Where(x => x.PlanId == 5);
+            }
+            else if(userPlanId == 6)
+            {
+                query = query.Where(x => x.PlanId == 6 || x.PlanId ==5);
+
+            }
+
+
+            var contenido = await query.ToListAsync();
+
+
+
+            List<ContenidoDTO> contenidoList = new List<ContenidoDTO>();
+
+            foreach (var item in contenido)
+    {
                 var contenido1 = new ContenidoDTO
                 {
                     Id = item.Id,
@@ -31,8 +71,8 @@ namespace APIStreaming.Services
                     Titulo = item.Titulo,
                     Duracion = item.Duracion,
                     FechaPublicacion = item.FechaPublicacion,
-                    Acceso = item.Acceso
-
+                    PlanId = item.PlanId,
+                    
                 };
 
                 contenidoList.Add(contenido1);
@@ -55,7 +95,7 @@ namespace APIStreaming.Services
                 Titulo = contenido.Titulo,
                 Duracion = contenido.Duracion,
                 FechaPublicacion = contenido.FechaPublicacion,
-                Acceso = contenido.Acceso
+                PlanId = contenido.PlanId
             };
         }
 
@@ -71,7 +111,7 @@ namespace APIStreaming.Services
                 Titulo = contenidoDTO.Titulo,
                 Duracion = contenidoDTO.Duracion,
                 FechaPublicacion = DateTime.Now,
-                Acceso = contenidoDTO.Acceso
+                PlanId = contenidoDTO.PlanId
 
 
             };
@@ -87,7 +127,7 @@ namespace APIStreaming.Services
                 Titulo = contenido.Titulo,
                 Duracion = contenido.Duracion,
                 FechaPublicacion = contenido.FechaPublicacion,
-                Acceso = contenido.Acceso
+                PlanId = contenido.PlanId
 
             };
         }
@@ -104,7 +144,7 @@ namespace APIStreaming.Services
             contenido.Titulo = contenidoDTO.Titulo;
             contenido.Duracion = contenido.Duracion;
             contenido.FechaPublicacion = contenido.FechaPublicacion;
-            contenido.Acceso = contenido.Acceso;
+            contenido.PlanId = contenido.PlanId;
 
             _context.Update(contenido);
             await _context.SaveChangesAsync();
@@ -117,7 +157,7 @@ namespace APIStreaming.Services
                 Titulo = contenido.Titulo,
                 Duracion = contenido.Duracion,
                 FechaPublicacion = contenido.FechaPublicacion,
-                Acceso = contenido.Acceso
+                PlanId = contenido.PlanId
 
 
             };
@@ -140,7 +180,7 @@ namespace APIStreaming.Services
                 Titulo = contenido.Titulo,
                 Duracion = contenido.Duracion,
                 FechaPublicacion = contenido.FechaPublicacion,
-                Acceso = contenido.Acceso
+                PlanId = contenido.PlanId
             };
 
         }

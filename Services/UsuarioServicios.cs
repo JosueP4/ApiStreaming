@@ -166,7 +166,11 @@ namespace APIStreaming.Servicios
             var claims = new[]
             {
                 new Claim(ClaimTypes.Role, usuario.Rol),
-                new Claim(ClaimTypes.Email, usuario.Email)
+                new Claim(ClaimTypes.Email, usuario.Email),
+                new Claim("UsuarioId", usuario.Id.ToString()),
+                new Claim("PlanId", usuario.PlanId.ToString())
+
+
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config.GetSection("JWT:Key").Value));
@@ -174,20 +178,14 @@ namespace APIStreaming.Servicios
 
             var security = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(1),
+                expires: DateTime.Now.AddMinutes(10),
                 signingCredentials: creds);
 
             string token = new JwtSecurityTokenHandler().WriteToken(security);
 
-            var refreshToken = GenerarRefreshToken();
-            usuario.RefreshToken = refreshToken;
-            usuario.RefreshTokenExpiration = DateTime.Now.AddDays(5);
-
-            _context.Update(usuario);
-            await _context.SaveChangesAsync();
-            
-
             return token;
+                        
+
 
         }
 

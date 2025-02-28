@@ -171,3 +171,4 @@ C:\Users\UserGPC\source\repos\APIStreaming\APIStreaming\obj\Debug\net8.0\APIStre
 C:\Users\UserGPC\source\repos\APIStreaming\APIStreaming\obj\Debug\net8.0\APIStreaming.genruntimeconfig.cache
 C:\Users\UserGPC\source\repos\APIStreaming\APIStreaming\obj\Debug\net8.0\ref\APIStreaming.dll
 C:\Users\UserGPC\source\repos\APIStreaming\APIStreaming\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\UserGPC\source\repos\APIStreaming\APIStreaming\obj\Debug\net8.0\APIStreaming.sourcelink.json
