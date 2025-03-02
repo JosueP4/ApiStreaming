@@ -29,7 +29,7 @@ public partial class ApistreamingDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=.\\SQLEXPRESS;Initial Catalog=APIstreamingDB;Integrated Security=True;Trust Server Certificate=True");
+        => optionsBuilder.UseSqlServer("Server = .\\SQLEXPRESS;Initial Catalog=APIstreamingDB; Integrated Security=True;Trust Server Certificate=True");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -124,6 +124,8 @@ public partial class ApistreamingDbContext : DbContext
             entity.Property(e => e.RefreshTokenExpiration)
                 .HasColumnType("datetime")
                 .HasColumnName("refreshTokenExpiration");
+            entity.Property(e => e.ResetToken).HasMaxLength(100);
+            entity.Property(e => e.ResetTokenExpiration).HasColumnType("datetime");
             entity.Property(e => e.Rol).HasMaxLength(50);
 
             entity.HasOne(d => d.Plan).WithMany(p => p.Usuarios)

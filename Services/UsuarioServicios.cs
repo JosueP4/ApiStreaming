@@ -21,34 +21,34 @@ namespace APIStreaming.Servicios
             _config = configuration;
         }
 
-        
+
         //Registrar usuario o login
         public async Task<Usuario> LoginUser(string email, string contra)
         {
-            
+
             var user = await _context.Usuarios
                 .FirstOrDefaultAsync(x => x.Email == email && x.Contra == contra);
 
-            return user; 
+            return user;
         }
 
         //cerrar sesion
         public async Task CerrarSesion(string refreshToken)
         {
-            
+
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
 
-            
+
             if (usuario == null)
             {
                 throw new Exception("Invalido o expiro el refresh token.");
             }
 
-          
+
             usuario.RefreshToken = null;
             usuario.RefreshTokenExpiration = null;
 
-            
+
             _context.Update(usuario);
             await _context.SaveChangesAsync();
         }
@@ -57,7 +57,7 @@ namespace APIStreaming.Servicios
         {
             var user = new Usuario
             {
-                
+
                 Nombre = nombre,
                 Rol = "Cliente",
                 Contra = contra,
@@ -101,12 +101,12 @@ namespace APIStreaming.Servicios
             if (user == null) return null;
 
 
-            
+
             user.Nombre = usuarioDTO.Nombre;
             user.Rol = usuarioDTO.Rol;
             user.Contra = usuarioDTO.Contra;
             user.Email = usuarioDTO.Email;
-            
+
 
             _context.Update(user);
             await _context.SaveChangesAsync();
@@ -184,7 +184,7 @@ namespace APIStreaming.Servicios
             string token = new JwtSecurityTokenHandler().WriteToken(security);
 
             return token;
-                        
+
 
 
         }
@@ -196,31 +196,67 @@ namespace APIStreaming.Servicios
 
         public async Task<string> RefreshToken(string refreshToken)
         {
-            
+
             var usuario = await _context.Usuarios.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
 
-            
+
             if (usuario == null || usuario.RefreshTokenExpiration < DateTime.Now)
             {
                 throw new Exception("Refresh token no valido o expirado.");
             }
 
-           
+
             var newAccessToken = await GenerarToken(usuario);
 
-           
+
             var newRefreshToken = GenerarRefreshToken();
             usuario.RefreshToken = newRefreshToken;
             usuario.RefreshTokenExpiration = DateTime.Now.AddDays(5);
 
-            
+
             _context.Update(usuario);
             await _context.SaveChangesAsync();
 
-            
+
             return newAccessToken;
         }
 
+
+        public async Task<string> OlvidePassword(string email)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null) throw new Exception($"no existe ese correo {email}");
+
+            var token = Guid.NewGuid().ToString();
+
+            user.ResetToken = token;
+            user.ResetTokenExpiration = DateTime.Now.AddMinutes(15);
+
+            await _context.SaveChangesAsync();
+
+            return token;
+        }
+
+
+        public async Task<UsuariosDTO> RestablecerPassword(string token, string newPassword)
+        {
+            var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.ResetToken == token);
+            if (user == null) throw new Exception("Token expirado o invalido");
+
+            // Aquí asignamos la nueva contraseña
+            user.Contra = newPassword;
+            user.ResetToken = null;  // Limpiar el token después de usarlo
+            user.ResetTokenExpiration = null;  // Limpiar la fecha de expiración del token
+
+            await _context.SaveChangesAsync();
+
+            return new UsuariosDTO
+            {
+                Id = user.Id,
+                Nombre = user.Nombre,
+                Email = user.Email
+            };
+        }
 
 
     }

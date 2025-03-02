@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("APIStreaming")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+65694518aba663d0cc024f83933981d232a8e328")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+045afe9ef2d8fe212e1e341927b0da417507cfb1")]
 [assembly: System.Reflection.AssemblyProductAttribute("APIStreaming")]
 [assembly: System.Reflection.AssemblyTitleAttribute("APIStreaming")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -395,8 +395,24 @@
   },
   {
     "ContainingType": "APIStreaming.Controllers.UsuarioController",
+    "Method": "Olvidar",
+    "RelativePath": "api/Usuario/OlvidarPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIStreaming.Controllers.UsuarioController",
     "Method": "RecuperarUsuario",
-    "RelativePath": "api/Usuario/RecuperarUsuario/{id}",
+    "RelativePath": "api/Usuario/RecuperarUsuarioEliminado/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -404,6 +420,22 @@
       {
         "Name": "id",
         "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIStreaming.Controllers.UsuarioController",
+    "Method": "RestablecerPassword",
+    "RelativePath": "api/Usuario/ReestablecerPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "System.Text.Json.JsonElement",
         "IsRequired": true
       }
     ],

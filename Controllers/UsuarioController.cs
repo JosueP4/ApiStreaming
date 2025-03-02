@@ -3,6 +3,7 @@ using APIStreaming.DTOs;
 using APIStreaming.Servicios;
 using APIStreaming.Models;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace APIStreaming.Controllers
 {
@@ -102,7 +103,7 @@ namespace APIStreaming.Controllers
 
         [Authorize(Roles ="admin")]
         [HttpPut]
-        [Route("RecuperarUsuario/{id}")]
+        [Route("RecuperarUsuarioEliminado/{id}")]
         public async Task<ActionResult> RecuperarUsuario([FromRoute] int id)
         {
 
@@ -110,8 +111,36 @@ namespace APIStreaming.Controllers
             return Ok();
 
         }
-        
 
+
+        [HttpPost("OlvidarPassword")]
+        public async Task<ActionResult> Olvidar(string email)
+        {
+            var token = await _service.OlvidePassword(email);
+            return Ok(new {Token = token, mensaje = "Utilize este token para cambiar la password"});
+        }
+
+
+        [HttpPost("ReestablecerPassword")]
+        public async Task<ActionResult> RestablecerPassword([FromBody] JsonElement model)
+        {
+            try
+            {
+                // Extraemos los valores del JSON
+                string token = model.GetProperty("token").GetString();  // Token recibido en el cuerpo de la solicitud
+                string newPassword = model.GetProperty("newPassword").GetString();  // Nueva contraseña
+
+                // Llamamos al servicio con los parámetros extraídos
+                var user = await _service.RestablecerPassword(token, newPassword);
+
+                return Ok(new { message = "Contraseña cambiada con éxito", user = user });
+            }
+            catch (Exception ex)
+            {
+                // Si ocurre algún error, devolvemos un BadRequest con el mensaje del error
+                return BadRequest(new { message = ex.Message });
+            }
+        }
 
 
     }

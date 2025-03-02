@@ -12,6 +12,9 @@
         public string Email { get; set; } = null!;
 
         public string? Rol { get; set; }
+        public string? ResetToken { get; set; }
+        public DateTime? ResetTokenExpiration { get; set; }
+
 
 
     }

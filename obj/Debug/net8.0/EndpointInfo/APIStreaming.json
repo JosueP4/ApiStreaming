@@ -662,7 +662,7 @@
         }
       }
     },
-    "/api/Usuario/RecuperarUsuario/{id}": {
+    "/api/Usuario/RecuperarUsuarioEliminado/{id}": {
       "put": {
         "tags": [
           "Usuario"
@@ -678,6 +678,52 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Usuario/OlvidarPassword": {
+      "post": {
+        "tags": [
+          "Usuario"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Usuario/ReestablecerPassword": {
+      "post": {
+        "tags": [
+          "Usuario"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { }
+            },
+            "text/json": {
+              "schema": { }
+            },
+            "application/*+json": {
+              "schema": { }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -847,6 +893,15 @@
           },
           "rol": {
             "type": "string",
+            "nullable": true
+          },
+          "resetToken": {
+            "type": "string",
+            "nullable": true
+          },
+          "resetTokenExpiration": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         },
