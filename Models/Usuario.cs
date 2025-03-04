@@ -27,6 +27,8 @@ public partial class Usuario
 
     public DateTime? ResetTokenExpiration { get; set; }
 
+    public virtual ICollection<Notificacione> Notificaciones { get; set; } = new List<Notificacione>();
+
     public virtual ICollection<Pago> Pagos { get; set; } = new List<Pago>();
 
     public virtual Plane? Plan { get; set; }

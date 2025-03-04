@@ -222,7 +222,7 @@ namespace APIStreaming.Servicios
         }
 
 
-        public async Task<string> OlvidePassword(string email)
+        public async Task<string> OlvidarPassword(string email)
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
             if (user == null) throw new Exception($"no existe ese correo {email}");
@@ -243,10 +243,10 @@ namespace APIStreaming.Servicios
             var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.ResetToken == token);
             if (user == null) throw new Exception("Token expirado o invalido");
 
-            // Aquí asignamos la nueva contraseña
+            
             user.Contra = newPassword;
-            user.ResetToken = null;  // Limpiar el token después de usarlo
-            user.ResetTokenExpiration = null;  // Limpiar la fecha de expiración del token
+            user.ResetToken = null; 
+            user.ResetTokenExpiration = null;  
 
             await _context.SaveChangesAsync();
 

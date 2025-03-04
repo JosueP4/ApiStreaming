@@ -24,6 +24,11 @@ builder.Services.AddScoped<SuscripcionesServices>();
 builder.Services.AddScoped<PlaneService>();
 builder.Services.AddScoped<PagoServices>();
 builder.Services.AddScoped<ContenidoServices>();
+builder.Services.AddScoped<NotificacionService>();
+builder.Services.AddHostedService<BackgroundNotificacion>();
+
+builder.Logging.AddConsole();
+
 
 //add Json Web Token
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(opciones =>

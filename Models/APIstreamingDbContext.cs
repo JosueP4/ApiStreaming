@@ -17,6 +17,8 @@ public partial class ApistreamingDbContext : DbContext
 
     public virtual DbSet<Contenido> Contenidos { get; set; }
 
+    public virtual DbSet<Notificacione> Notificaciones { get; set; }
+
     public virtual DbSet<Pago> Pagos { get; set; }
 
     public virtual DbSet<Plane> Planes { get; set; }
@@ -54,13 +56,27 @@ public partial class ApistreamingDbContext : DbContext
                 .HasConstraintName("FK__CONTENIDO__Suscr__59063A47");
         });
 
+        modelBuilder.Entity<Notificacione>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Notifica__3213E83F0BA55048");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.FechaCreacion)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.UsuariosId).HasColumnName("usuariosId");
+
+            entity.HasOne(d => d.Usuarios).WithMany(p => p.Notificaciones)
+                .HasForeignKey(d => d.UsuariosId)
+                .HasConstraintName("FK__Notificac__usuar__3C34F16F");
+        });
+
         modelBuilder.Entity<Pago>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__PAGOS__3214EC07AEE497DF");
 
             entity.ToTable("PAGOS");
 
-            entity.Property(e => e.Estado).HasMaxLength(50);
             entity.Property(e => e.FechaPago)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
