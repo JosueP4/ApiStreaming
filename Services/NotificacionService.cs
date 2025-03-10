@@ -1,68 +1,66 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using APIStreaming.Models;
 using Microsoft.AspNetCore.Mvc;
+using APIStreaming.DTOs;
 namespace APIStreaming.Services
 {
     public class NotificacionService
     {
 
         private readonly ApistreamingDbContext _context;
-        private readonly ILogger _looger;
 
-        public NotificacionService(ApistreamingDbContext context, ILogger logger) { _context = context; _looger = logger; }
-        public async Task RecordarPago()
+        public NotificacionService(ApistreamingDbContext context) { _context = context; }
+             
+        public async Task<List<UsuariosDTO>> UsuariosPagoPendiente()
         {
-            var pagoPendiente = await _context.Pagos
-                .Where(x => x.Estado == false )
-                .ToListAsync();
-
-            _looger.LogInformation($"Pagos pendientes encontrados: {pagoPendiente.Count}");
-            foreach (var pago in pagoPendiente)
-            {
-                var suscripciones = await _context.Suscripciones
-                    .Include(x => x.Usuario)
-                    .FirstOrDefaultAsync(x => x.Id == pago.SuscripcionId);
-
-                if (suscripciones == null || suscripciones.Usuario == null)
+            var user = await _context.Usuarios.Where(x=> x.Suscripciones.Any(s=>s.Estado == "Activa" && s.FechaFinalizacion <=DateTime.Now.AddDays(7)&&s.Pagos.All(s=> s.Estado==false)))
+                .Select(x=> new UsuariosDTO
                 {
-                    // Si no se encuentra la suscripción o usuario, omite la notificación
-                    continue;
-                }
+                    Id = x.Id,
+                    Nombre = x.Nombre,
+                    Email = x.Email
+                    
+                }).ToListAsync();
 
-                var user = suscripciones.Usuario;
+            
 
+
+            return user;
+        }
+
+        public async Task CrearNotificacionPendiente()
+        {
+            var usuarios = await UsuariosPagoPendiente();
+
+            foreach(var usuario in usuarios)
+            {
                 var notificacion = new Notificacione
                 {
-                    UsuariosId = user.Id,
-                    Mensaje = $"{user.Nombre} es para recordarle realizar el pago de la fecha {pago.FechaPago}",
+                    UsuariosId = usuario.Id,
+                    Mensaje = "Tienes un pago pendiente",
                     FechaCreacion = DateTime.Now,
                     Enviado = false
                 };
-
-                _context.Add(notificacion); // Agrega la notificación a la lista
+                _context.Notificaciones.Add(notificacion);
+                await _context.SaveChangesAsync();
             }
 
-            await _context.SaveChangesAsync(); // Guardar todas las notificaciones al final
         }
 
-
-        public async Task<List<Notificacione>> ListaNotificacionesPendiente()
+        public async Task EnviarNotificacionPendiente()
         {
-            return await _context.Notificaciones.Where(x => x.Enviado == false).ToListAsync();
-        }
+            var notificacion = await _context.Notificaciones.Where(x => x.Enviado == false).ToListAsync();
 
+            foreach(var notificacion1 in notificacion)
+            {
+                Console.WriteLine($"enviado notificacion al usuario Id: {notificacion1.UsuariosId}: {notificacion1.Mensaje}");
 
-        public async Task<Notificacione> EnviarNotificacion(int id)
-        {
-            var notificacion = await _context.Notificaciones.FindAsync(id);
-            if (notificacion == null) return null;
+                notificacion1.Enviado = true;
+                _context.Update(notificacion1);
+            }
 
-            notificacion.Enviado = true;
             await _context.SaveChangesAsync();
-
-            return notificacion;
         }
-
 
     }
 }

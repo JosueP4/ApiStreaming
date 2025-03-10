@@ -19,7 +19,7 @@ namespace APIStreaming.Controllers
             _services = services;
         }
 
-
+        
 
         [Authorize(Roles = "Cliente, admin")]
         [HttpGet("ListaContenido")]
@@ -29,7 +29,7 @@ namespace APIStreaming.Controllers
             return Ok(contenido);
         }
 
-
+        
 
         [Authorize(Roles = "Cliente, admin")]
         [HttpGet("BuscarContenido/{id}")]

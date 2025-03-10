@@ -29,6 +29,17 @@ namespace APIStreaming.Servicios
             var user = await _context.Usuarios
                 .FirstOrDefaultAsync(x => x.Email == email && x.Contra == contra);
 
+            if (user == null)
+            {
+                throw new Exception("Usuario o contraseña incorrectos");
+            }
+
+
+            if (user.EstaEliminado == true)
+            {
+                throw new Exception("no puede acceder por que se le acabo la suscripcion");
+            }
+
             return user;
         }
 
@@ -138,6 +149,8 @@ namespace APIStreaming.Servicios
                 Contra = user.Contra,
                 Email = user.Email
             };
+
+
         }
 
         public async Task<UsuariosDTO> RecuperarUsuario(int id)

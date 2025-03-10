@@ -11,11 +11,11 @@ public partial class Suscripcione
 
     public DateTime? FechaInicio { get; set; }
 
-    public DateTime? FechaFinalizacion { get; set; }
-
     public string Estado { get; set; } = null!;
 
     public int? PlanId { get; set; }
+
+    public DateTime? FechaFinalizacion { get; set; }
 
     public virtual ICollection<Contenido> Contenidos { get; set; } = new List<Contenido>();
 

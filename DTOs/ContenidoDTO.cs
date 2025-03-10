@@ -14,9 +14,10 @@
 
         public DateTime? FechaPublicacion { get; set; }
         public int? PlanId { get; set; }
+        public string? DuracionFormato { get; set; }
 
 
-       
+
 
 
 

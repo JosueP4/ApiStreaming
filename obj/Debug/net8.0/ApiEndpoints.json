@@ -90,31 +90,35 @@
   },
   {
     "ContainingType": "APIStreaming.Controllers.NotificacionesController",
-    "Method": "EnviarNotificaciones",
-    "RelativePath": "api/Notificaciones/EnviarNotificacion/{id}",
-    "HttpMethod": "PUT",
+    "Method": "CrearNotificacionesPendientes",
+    "RelativePath": "api/Notificaciones/crear-notificaciones-pendientes",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
     "ContainingType": "APIStreaming.Controllers.NotificacionesController",
-    "Method": "ObtenerNotificacionesPendientes",
-    "RelativePath": "api/Notificaciones/Pagospendientes",
+    "Method": "EnviarNotificacionesPendientes",
+    "RelativePath": "api/Notificaciones/enviar-notificaciones-pendientes",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "APIStreaming.Controllers.NotificacionesController",
+    "Method": "GetUsuariosPagoPendiente",
+    "RelativePath": "api/Notificaciones/usuarios-pago-pendiente",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[APIStreaming.Models.Notificacione, APIStreaming, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[APIStreaming.DTOs.UsuariosDTO, APIStreaming, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

@@ -25,9 +25,9 @@ builder.Services.AddScoped<PlaneService>();
 builder.Services.AddScoped<PagoServices>();
 builder.Services.AddScoped<ContenidoServices>();
 builder.Services.AddScoped<NotificacionService>();
-builder.Services.AddHostedService<BackgroundNotificacion>();
 
-builder.Logging.AddConsole();
+builder.Services.AddHostedService<BackGroundUsuario>();
+
 
 
 //add Json Web Token

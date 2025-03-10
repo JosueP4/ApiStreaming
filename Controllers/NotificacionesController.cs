@@ -1,6 +1,6 @@
-﻿using APIStreaming.Models;
+﻿using APIStreaming.DTOs;
+using APIStreaming.Models;
 using APIStreaming.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace APIStreaming.Controllers
@@ -10,25 +10,34 @@ namespace APIStreaming.Controllers
     public class NotificacionesController : ControllerBase
     {
         private readonly NotificacionService _services;
+
         public NotificacionesController(NotificacionService service)
         {
             _services = service;
         }
-
-        [HttpGet("Pagospendientes")]
-        public async Task<ActionResult<List<Notificacione>>> ObtenerNotificacionesPendientes()
+        // Endpoint para obtener usuarios con pagos pendientes
+        [HttpGet("usuarios-pago-pendiente")]
+        public async Task<ActionResult<List<UsuariosDTO>>> GetUsuariosPagoPendiente()
         {
-            var notificaciones = await _services.ListaNotificacionesPendiente();
-            return Ok(notificaciones);
+            var usuarios = await _services.UsuariosPagoPendiente();
+            return Ok(usuarios);
         }
 
-        [HttpPut("EnviarNotificacion/{id}")]
-        public async Task<ActionResult> EnviarNotificaciones(int id)
+        // Endpoint para crear notificaciones pendientes
+        [HttpPost("crear-notificaciones-pendientes")]
+        public async Task<IActionResult> CrearNotificacionesPendientes()
         {
-            var notificaciones = await _services.EnviarNotificacion(id);
-            return Ok(notificaciones);
+            await _services.CrearNotificacionPendiente();
+            return Ok("Notificaciones pendientes creadas correctamente.");
         }
 
+        // Endpoint para enviar notificaciones pendientes
+        [HttpPost("enviar-notificaciones-pendientes")]
+        public async Task<IActionResult> EnviarNotificacionesPendientes()
+        {
+            await _services.EnviarNotificacionPendiente();
+            return Ok("Notificaciones pendientes enviadas correctamente.");
+        }
 
     }
 }

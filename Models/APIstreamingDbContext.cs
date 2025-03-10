@@ -27,7 +27,6 @@ public partial class ApistreamingDbContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-    public virtual DbSet<VistaContenidoConDuracion> VistaContenidoConDuracions { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -112,7 +111,7 @@ public partial class ApistreamingDbContext : DbContext
 
             entity.Property(e => e.Estado).HasMaxLength(50);
             entity.Property(e => e.FechaFinalizacion)
-                .HasComputedColumnSql("(dateadd(day,(30),[FechaInicio]))", false)
+                .HasComputedColumnSql("(dateadd(month,(1),[FechaInicio]))", false)
                 .HasColumnType("datetime");
             entity.Property(e => e.FechaInicio)
                 .HasDefaultValueSql("(getdate())")
@@ -149,18 +148,6 @@ public partial class ApistreamingDbContext : DbContext
                 .HasConstraintName("FK__USUARIOS__PlanId__2739D489");
         });
 
-        modelBuilder.Entity<VistaContenidoConDuracion>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToView("VistaContenidoConDuracion");
-
-            entity.Property(e => e.DuracionFormato)
-                .HasMaxLength(41)
-                .IsUnicode(false);
-            entity.Property(e => e.Id).ValueGeneratedOnAdd();
-            entity.Property(e => e.Titulo).HasMaxLength(50);
-        });
 
         OnModelCreatingPartial(modelBuilder);
     }

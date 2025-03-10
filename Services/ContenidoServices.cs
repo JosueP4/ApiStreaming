@@ -18,68 +18,44 @@ namespace APIStreaming.Services
 
         public async Task<List<ContenidoDTO>> ListaVideos(ClaimsPrincipal user)
         {
-
-            var usuario = int.Parse(user.FindFirst("UsuarioId").Value);
-
             var usuarioClaim = user.FindFirst("UsuarioId");
-
-            if (usuarioClaim == null)
-            {
-                
-                throw new Exception("no se encontro el usuario");
-            }
+            if (usuarioClaim == null) throw new Exception("Usuario no encontrado");
 
             var planClaim = user.FindFirst("PlanId");
-
-            if (planClaim == null)
-            {
-
-                throw new Exception("no se encontro el plan");
-            }
+            if (planClaim == null) throw new Exception("Plan no encontrado");
 
             if (!int.TryParse(planClaim.Value, out int userPlanId))
-            {
-                throw new Exception("El valor del claim 'PlanId' no es un entero válido.");
-            }
+                throw new Exception("PlanId inválido");
 
             IQueryable<Contenido> query = _context.Contenidos;
 
-            if(userPlanId == 5)
-            {
-                query = query.Where(x => x.PlanId == 5);
-            }
-            else if(userPlanId == 6)
-            {
-                query = query.Where(x => x.PlanId == 6 || x.PlanId ==5);
-
-            }
-
-
-            var contenido = await query.ToListAsync();
-
-
+            if (userPlanId == 5)
+                query = query.Where(c => c.PlanId == 5);
+            else if (userPlanId == 6)
+                query = query.Where(c => c.PlanId == 5 || c.PlanId == 6);
+            
 
             List<ContenidoDTO> contenidoList = new List<ContenidoDTO>();
 
-            foreach (var item in contenido)
-    {
+            foreach (var contenido in query)
+            {
                 var contenido1 = new ContenidoDTO
                 {
-                    Id = item.Id,
-                    SuscripcionId = item.SuscripcionId,
-                    Descripcion = item.Descripcion,
-                    Titulo = item.Titulo,
-                    Duracion = item.Duracion,
-                    FechaPublicacion = item.FechaPublicacion,
-                    PlanId = item.PlanId,
-                    
+                    Id = contenido.Id,
+                    SuscripcionId = contenido.SuscripcionId,
+                    Descripcion = contenido.Descripcion,
+                    Titulo = contenido.Titulo,
+                    Duracion = contenido.Duracion,
+                    FechaPublicacion = contenido.FechaPublicacion,
+                    PlanId = contenido.PlanId
                 };
 
-                contenidoList.Add(contenido1);
+                
+            contenidoList.Add(contenido1);
             }
 
-            return contenidoList;
 
+            return contenidoList;
         }
 
         public async Task<ContenidoDTO> BuscarContenido(int id)
