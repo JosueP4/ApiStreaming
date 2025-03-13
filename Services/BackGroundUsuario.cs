@@ -28,11 +28,12 @@ namespace APIStreaming.Services
 
                     var userVencidos = await context.Usuarios.Include(x => x.Suscripciones)
                         .Where(x => x.Suscripciones.Any())
-                        .Where(x => x.Suscripciones.OrderByDescending(x => x.FechaFinalizacion).FirstOrDefault().FechaFinalizacion <= DateTime.Now && !x.EstaEliminado).ToListAsync();
+                        .Where(x => x.Suscripciones.OrderByDescending(x => x.FechaFinalizacion).FirstOrDefault().FechaFinalizacion <= DateTime.Now.AddDays(-5) && !x.EstaEliminado).ToListAsync();
                         
                     foreach(var user in userVencidos)
                     {
                         user.EstaEliminado = true;
+                        
                     }
 
                     await context.SaveChangesAsync();

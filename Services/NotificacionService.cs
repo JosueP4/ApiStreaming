@@ -18,7 +18,10 @@ namespace APIStreaming.Services
                 {
                     Id = x.Id,
                     Nombre = x.Nombre,
-                    Email = x.Email
+                    Email = x.Email,
+                    Contra = "******",
+                    Rol = x.Rol
+
                     
                 }).ToListAsync();
 

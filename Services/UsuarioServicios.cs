@@ -234,7 +234,7 @@ namespace APIStreaming.Servicios
             return newAccessToken;
         }
 
-
+        //Generar y utilizar Reset Token
         public async Task<string> OlvidarPassword(string email)
         {
             var user = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email == email);
